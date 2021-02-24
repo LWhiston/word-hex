@@ -1,6 +1,6 @@
 import "./App.css";
 import { Canvas } from "react-three-fiber";
-import { Box } from "./components/Box";
+import { Hex } from "./components/Hex";
 
 export const App = () => {
   return (
@@ -8,7 +8,7 @@ export const App = () => {
       <Canvas>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <Box />
+        <Hex />
       </Canvas>
     </div>
   );
