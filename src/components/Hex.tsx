@@ -1,8 +1,15 @@
 import { useRef, useState } from "react";
-import { MeshProps } from "react-three-fiber";
 import type { Mesh } from "three";
+import * as Honeycomb from "honeycomb-grid";
 
-export const Hex = (props: MeshProps) => {
+type Props = {
+  hex: Honeycomb.Hex<{}>;
+};
+
+export const Hex = (props: Props) => {
+  const { hex } = props;
+  const { x, y } = hex.toPoint();
+
   const mesh = useRef<Mesh>();
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
@@ -15,6 +22,7 @@ export const Hex = (props: MeshProps) => {
       onClick={(_event) => setActive(!active)}
       onPointerOver={(_event) => setHover(true)}
       onPointerOut={(_event) => setHover(false)}
+      position={[x, y, 0]}
       rotation={[Math.PI / 2, 0, 0]}
     >
       <cylinderBufferGeometry

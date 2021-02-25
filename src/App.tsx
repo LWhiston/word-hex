@@ -16,14 +16,12 @@ export const App = () => {
           near: 0.1,
           far: 1000,
           position: [0, 0, 12],
-          rotation: [-1, Math.PI / 4, 3],
         }}
       >
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
         {grid.map((hex) => {
-          const { x, y } = hex.toPoint();
-          return <Hex position={[x, y, 0]} />;
+          return <Hex hex={hex} />;
         })}
       </Canvas>
     </div>
