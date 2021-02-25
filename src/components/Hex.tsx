@@ -1,28 +1,29 @@
 import { useRef, useState } from "react";
 import type { Mesh } from "three";
-import * as Honeycomb from "honeycomb-grid";
+import { useHex } from "../state/hexState";
 
 type Props = {
-  hex: Honeycomb.Hex<{}>;
+  hexIndex: number;
 };
 
 export const Hex = (props: Props) => {
-  const { hex } = props;
-  const { x, y } = hex.toPoint();
-
+  const { hexIndex } = props;
   const mesh = useRef<Mesh>();
+  const { hex, selected, toggleHexSelected } = useHex(hexIndex);
+  const { x, y } = hex.toPoint();
   const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
 
   return (
     <mesh
       {...props}
       ref={mesh}
       scale={[1, 1, 1]}
-      onClick={(_event) => setActive(!active)}
+      onClick={(_event) => {
+        toggleHexSelected();
+      }}
       onPointerOver={(_event) => setHover(true)}
       onPointerOut={(_event) => setHover(false)}
-      position={[x, y, 0]}
+      position={[x, y, hovered ? 0.5 : 0]}
       rotation={[Math.PI / 2, 0, 0]}
     >
       <cylinderBufferGeometry
@@ -33,7 +34,7 @@ export const Hex = (props: Props) => {
           6, //radialSegments
         ]}
       />
-      <meshStandardMaterial color={hovered ? "#cd8500" : "#8b5a2b"} />
+      <meshStandardMaterial color={selected ? "#cd8500" : "#8b5a2b"} />
     </mesh>
   );
 };

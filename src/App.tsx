@@ -1,13 +1,10 @@
 import "./App.css";
 import { Canvas } from "react-three-fiber";
 import { Hex } from "./components/Hex";
-import * as Honeycomb from "honeycomb-grid";
+import { useHexStore } from "./state/hexState";
 
 export const App = () => {
-  const HexFactory = Honeycomb.extendHex({ size: 1.07 });
-  const GridFactory = Honeycomb.defineGrid(HexFactory);
-  const grid = GridFactory.hexagon({ radius: 4 });
-
+  const length = useHexStore((state) => state.hexes.length);
   return (
     <div className="App">
       <Canvas
@@ -20,9 +17,9 @@ export const App = () => {
       >
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        {grid.map((hex) => {
-          return <Hex hex={hex} />;
-        })}
+        {Array.from({ length }).map((_, index) => (
+          <Hex key={index} hexIndex={index} />
+        ))}
       </Canvas>
     </div>
   );
