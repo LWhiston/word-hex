@@ -29,12 +29,14 @@ export const useHexStore = create<HexState>((set, get) => ({
   setSelectedHexIndex: (index) => {
     const { hexes, selectedHexIndex } = get();
     if (index !== undefined) {
+      //Select current hex to selected
       hexes[index] = {
         ...hexes[index],
         selected: true,
       };
     }
     if (selectedHexIndex !== undefined && index !== selectedHexIndex) {
+      //Deselect previously selected hex
       hexes[selectedHexIndex] = {
         ...hexes[selectedHexIndex],
         selected: false,
