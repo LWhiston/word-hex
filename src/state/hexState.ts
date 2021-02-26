@@ -12,6 +12,7 @@ type HexState = {
   hexes: Hex[];
   selectedHexIndex: number | undefined;
   setSelectedHexIndex: (index: number | undefined) => void;
+  setSelectedLetter: (letter: string | undefined) => void;
 };
 
 const HexFactory = Honeycomb.extendHex<{ size: number }>({ size: 1.07 });
@@ -40,9 +41,18 @@ export const useHexStore = create<HexState>((set, get) => ({
       };
     }
     set({
-      hexes,
       selectedHexIndex: index,
     });
+  },
+  setSelectedLetter: (letter) => {
+    const { hexes, selectedHexIndex } = get();
+    if (selectedHexIndex !== undefined) {
+      hexes[selectedHexIndex] = {
+        ...hexes[selectedHexIndex],
+        letter,
+      };
+      set({});
+    }
   },
 }));
 

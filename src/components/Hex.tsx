@@ -15,7 +15,7 @@ export const Hex = (props: Props) => {
   const [hovered, setHover] = useState(false);
 
   return (
-    <group>
+    <group position={[x, y, hovered ? 0.5 : 0]}>
       <mesh
         {...props}
         ref={mesh}
@@ -25,7 +25,7 @@ export const Hex = (props: Props) => {
         }}
         onPointerOver={(_event) => setHover(true)}
         onPointerOut={(_event) => setHover(false)}
-        position={[x, y, hovered ? 0.5 : 0]}
+        position={[0, 0, 0]}
         rotation={[Math.PI / 2, 0, 0]}
       >
         <cylinderBufferGeometry
@@ -38,9 +38,9 @@ export const Hex = (props: Props) => {
         />
         <meshStandardMaterial color={selected ? "#cd8500" : "#8b5a2b"} />
       </mesh>
-      {hexIndex === 0 && (
+      {letter !== undefined && (
         <Suspense fallback={null}>
-          <Letter letter={"L"} />
+          <Letter letter={letter} />
         </Suspense>
       )}
     </group>
