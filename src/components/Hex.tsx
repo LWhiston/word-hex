@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import type { Mesh } from "three";
 import { useHex } from "../state/hexState";
+import { Letter } from "./Letter";
 
 type Props = {
   hexIndex: number;
@@ -9,32 +10,39 @@ type Props = {
 export const Hex = (props: Props) => {
   const { hexIndex } = props;
   const mesh = useRef<Mesh>();
-  const { hex, selected, toggleHexSelected } = useHex(hexIndex);
+  const { hex, selected, letter, toggleHexSelected } = useHex(hexIndex);
   const { x, y } = hex.toPoint();
   const [hovered, setHover] = useState(false);
 
   return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={[1, 1, 1]}
-      onClick={(_event) => {
-        toggleHexSelected();
-      }}
-      onPointerOver={(_event) => setHover(true)}
-      onPointerOut={(_event) => setHover(false)}
-      position={[x, y, hovered ? 0.5 : 0]}
-      rotation={[Math.PI / 2, 0, 0]}
-    >
-      <cylinderBufferGeometry
-        args={[
-          1, //radiusTop
-          1, //radiusBottom
-          0.2, //height
-          6, //radialSegments
-        ]}
-      />
-      <meshStandardMaterial color={selected ? "#cd8500" : "#8b5a2b"} />
-    </mesh>
+    <group>
+      <mesh
+        {...props}
+        ref={mesh}
+        scale={[1, 1, 1]}
+        onClick={(_event) => {
+          toggleHexSelected();
+        }}
+        onPointerOver={(_event) => setHover(true)}
+        onPointerOut={(_event) => setHover(false)}
+        position={[x, y, hovered ? 0.5 : 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <cylinderBufferGeometry
+          args={[
+            1, //radiusTop
+            1, //radiusBottom
+            0.2, //height
+            6, //radialSegments
+          ]}
+        />
+        <meshStandardMaterial color={selected ? "#cd8500" : "#8b5a2b"} />
+      </mesh>
+      {hexIndex === 0 && (
+        <Suspense fallback={null}>
+          <Letter letter={"L"} />
+        </Suspense>
+      )}
+    </group>
   );
 };
