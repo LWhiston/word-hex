@@ -1,9 +1,11 @@
+import React from "react";
 import "./App.css";
 import { Canvas } from "react-three-fiber";
 import { Hex } from "./components/Hex";
 import { useHexStore } from "./state/hexState";
 import { useEffect, useRef } from "react";
 import { isAlpha } from "./util/isAlpha";
+import { Rack } from "./components/Rack";
 
 export const App = () => {
   const length = useHexStore((state) => state.hexes.length);
@@ -43,14 +45,17 @@ export const App = () => {
           fov: 75,
           near: 0.1,
           far: 1000,
-          position: [0, 0, 12],
+          position: [0, 0, 14],
         }}
       >
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        {Array.from({ length }).map((_, index) => (
-          <Hex key={index} hexIndex={index} />
-        ))}
+        <group position={[0, 1, 0]}>
+          {Array.from({ length }).map((_, index) => (
+            <Hex key={index} hexIndex={index} />
+          ))}
+        </group>
+        <Rack />
       </Canvas>
     </div>
   );

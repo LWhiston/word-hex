@@ -1,5 +1,7 @@
 import create from "zustand";
 import { Tile } from "./rackState";
+import { splitAt } from "ramda";
+import { shuffle } from "../util/shuffle";
 
 type TilePile = {
   tiles: Tile[];
@@ -35,16 +37,16 @@ const initialTileInfo: (Tile & { count: number })[] = [
   { letter: "Z", count: 1, value: 10 },
 ];
 
-export const useRackStore = create<TilePile>((set, get) => ({
-  tiles: initialTileInfo.flatMap(({ letter, count, value }) =>
-    Array.from({ length: count }).map((_) => ({ letter, value }))
+export const useTilePileState = create<TilePile>((set, get) => ({
+  tiles: shuffle(
+    initialTileInfo.flatMap(({ letter, count, value }) =>
+      Array.from({ length: count }).map((_) => ({ letter, value }))
+    )
   ),
   draw: (drawCount) => {
     const { tiles } = get();
-    if (drawCount > tiles.length) {
-      set({ tiles: [] });
-      return tiles;
-    }
-    return [];
+    const [drawnTiles, remainingTiles] = splitAt(drawCount, tiles);
+    set({ tiles: remainingTiles });
+    return drawnTiles;
   },
 }));

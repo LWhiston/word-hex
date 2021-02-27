@@ -1,4 +1,5 @@
 import create from "zustand";
+import { useTilePileState } from "./tilePileState";
 
 export type Tile = {
   readonly letter: string;
@@ -12,5 +13,5 @@ type RackState = {
 const numOfTiles = 7;
 
 export const useRackStore = create<RackState>((set) => ({
-  tiles: [],
+  tiles: useTilePileState.getState().draw(numOfTiles),
 }));
