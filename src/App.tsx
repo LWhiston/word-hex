@@ -3,39 +3,43 @@ import "./App.css";
 import { Canvas } from "react-three-fiber";
 import { Hex } from "./components/Hex";
 import { useHexStore } from "./state/hexState";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { isAlpha } from "./util/isAlpha";
 import { Rack } from "./components/Rack";
+import { useWorldListInit } from "./state/wordListState";
+import { useTurnStore } from "./state/turnState";
+import { tileLookup } from "./state/tilePileState";
 
 export const App = () => {
   const length = useHexStore((state) => state.hexes.length);
   const setSelectedLetter = useHexStore((state) => state.setSelectedLetter);
+  const { playMove, endTurn, undoMove } = useTurnStore();
+  useWorldListInit();
+
   useEffect(() => {
     document.onkeypress = (event) => {
       if (event.key === "Enter") {
-        console.log("Enter Pressed");
+        endTurn();
       }
       const letterPressed = event.key.toUpperCase();
-      if (isAlpha(letterPressed)) {
-        setSelectedLetter(letterPressed);
+      const { hexes, selectedHexIndex } = useHexStore.getState();
+      if (isAlpha(letterPressed) && selectedHexIndex) {
+        playMove({
+          tile: tileLookup[letterPressed],
+          hex: hexes[selectedHexIndex],
+        });
       }
     };
 
     document.onkeydown = (event) => {
-      if (event.key === "Backspace" || event.key === "Escape") {
-        setSelectedLetter(undefined);
+      const { selectedHexIndex } = useHexStore.getState();
+      if (
+        (event.key === "Backspace" || event.key === "Escape") &&
+        selectedHexIndex !== undefined
+      ) {
+        undoMove(selectedHexIndex);
       }
     };
-  });
-
-  const wordList = useRef<{ [word: string]: 1 | undefined }>();
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/wordlist.json");
-      const data = await response.json();
-      wordList.current = data;
-    };
-    fetchData();
   });
 
   return (

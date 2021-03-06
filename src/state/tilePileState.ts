@@ -37,6 +37,11 @@ const initialTileInfo: (Tile & { count: number })[] = [
   { letter: "Z", count: 1, value: 10 },
 ];
 
+export const tileLookup: { [word: string]: Tile } = {};
+initialTileInfo.forEach(({ letter, value }) => {
+  tileLookup[letter] = { letter, value };
+});
+
 export const useTilePileState = create<TilePile>((set, get) => ({
   tiles: shuffle(
     initialTileInfo.flatMap(({ letter, count, value }) =>

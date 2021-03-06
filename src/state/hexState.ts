@@ -2,7 +2,7 @@ import create from "zustand";
 import * as Honeycomb from "honeycomb-grid";
 import { useCallback } from "react";
 
-type Hex = {
+export type Hex = {
   hex: Honeycomb.Hex<{ size: number }>;
   letter: string | undefined;
   selected: boolean;
