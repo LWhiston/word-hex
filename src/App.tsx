@@ -21,11 +21,11 @@ export const App = () => {
         endTurn();
       }
       const letterPressed = event.key.toUpperCase();
-      const { hexes, selectedHexIndex } = useHexStore.getState();
+      const { grid, selectedHexIndex } = useHexStore.getState();
       if (isAlpha(letterPressed) && selectedHexIndex) {
         playMove({
           tile: tileLookup[letterPressed],
-          hex: hexes[selectedHexIndex],
+          hex: grid[selectedHexIndex],
         });
       }
     };

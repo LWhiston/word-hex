@@ -1,6 +1,6 @@
 import { Grid } from "honeycomb-grid";
 import { equals, reverse } from "ramda";
-import { Hex } from "../state/hexState";
+import { Hex, HexData } from "../state/hexState";
 import { Move } from "../state/turnState";
 import { getLine } from "./tileValidation";
 
@@ -16,11 +16,15 @@ const directionPairs: [number, number][] = [
   [2, 5],
 ];
 
-export const getWords = (moves: Move[], hexes: Hex[], grid: Grid): string[] => {
+export const getWords = (
+  moves: Move[],
+  hexData: HexData[],
+  grid: Grid
+): string[] => {
   if (moves.length === 1) {
     const words = moves.flatMap((move) =>
       directionPairs.map((directionPair) =>
-        calculateWord(directionPair, move, grid, hexes)
+        calculateWord(directionPair, move, grid, hexData)
       )
     );
     return words;
@@ -32,12 +36,14 @@ export const getWords = (moves: Move[], hexes: Hex[], grid: Grid): string[] => {
       directionToDirectionPair[line?.coordinate!],
       moves[0],
       grid,
-      hexes
+      hexData
     );
     const otherWords = moves.flatMap((move) =>
       directionPairs
         .filter((directionPair) => !equals(directionPair, mainDirectionPair))
-        .map((directionPair) => calculateWord(directionPair, move, grid, hexes))
+        .map((directionPair) =>
+          calculateWord(directionPair, move, grid, hexData)
+        )
     );
     return [mainWord, ...otherWords];
   }
@@ -47,20 +53,20 @@ const calculateWord = (
   directionPair: [number, number],
   move: Move,
   grid: Grid,
-  hexes: Hex[]
+  hexData: HexData[]
 ) => {
   const startingLetter = move.tile.letter;
   const firstDirectionLetters = getLettersInDirection(
     directionPair[0],
     move.hex,
     grid,
-    hexes
+    hexData
   );
   const secondDirectionLetters = getLettersInDirection(
     directionPair[1],
     move.hex,
     grid,
-    hexes
+    hexData
   );
   return (
     reverse(firstDirectionLetters) + startingLetter + secondDirectionLetters
@@ -71,18 +77,16 @@ const getLettersInDirection = (
   direction: number,
   startingHex: Hex,
   grid: Grid,
-  hexes: Hex[]
+  hexData: HexData[]
 ): string => {
-  const [nextHoneycombHex] = grid.neighborsOf(startingHex.hex, direction);
-  if (nextHoneycombHex === undefined) {
+  const [nextHex] = grid.neighborsOf(startingHex, direction);
+  if (nextHex === undefined) {
     return "";
   }
-  const nextHex = hexes[grid.indexOf(nextHoneycombHex)];
-  if (nextHex.letter === undefined) {
+  const { letter } = hexData[grid.indexOf(nextHex)];
+  if (letter === undefined) {
     return "";
   } else {
-    return (
-      nextHex.letter + getLettersInDirection(direction, nextHex, grid, hexes)
-    );
+    return letter + getLettersInDirection(direction, nextHex, grid, hexData);
   }
 };

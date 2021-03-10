@@ -1,5 +1,5 @@
 import { identity, last, uniq } from "ramda";
-import { Hex } from "../state/hexState";
+import { Hex, HexData } from "../state/hexState";
 import { Tile } from "../state/rackState";
 import { Move } from "../state/turnState";
 
@@ -9,8 +9,8 @@ type Line = {
 };
 
 export const getLine = (hex1: Hex, hex2: Hex): Line | undefined => {
-  const { q: q1, r: r1, s: s1 } = hex1.hex;
-  const { q: q2, r: r2, s: s2 } = hex2.hex;
+  const { q: q1, r: r1, s: s1 } = hex1;
+  const { q: q2, r: r2, s: s2 } = hex2;
 
   if (q1 === q2 && r1 === r2 && s1 === s2) {
     //Same hex
@@ -47,7 +47,7 @@ const hexesInLine = (hexes: Hex[]) => {
   if (line === undefined) {
     return false;
   }
-  return restHexes.every((hex) => hex.hex[line.coordinate] === line.value);
+  return restHexes.every((hex) => hex[line.coordinate] === line.value);
 };
 
 //checks if the count of each letter in x is less than or equal to the count of each letter in y
@@ -60,7 +60,7 @@ const hexesInLine = (hexes: Hex[]) => {
 
 export const validateMoves = (
   moves: Move[],
-  hexes: Hex[],
+  hexes: HexData[],
   availableTiles: Tile[]
 ): boolean => {
   const moveHexes = moves.map((move) => move.hex);

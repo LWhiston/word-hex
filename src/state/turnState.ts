@@ -33,6 +33,7 @@ export const useTurnStore = create<TurnState>((set, get) => ({
   undoMove: (hexIndex) => {
     const { moves } = get();
     const { hexes } = useHexStore.getState();
+    console.log(moves, hexes, hexIndex);
   },
   endTurn: () => {
     const { moves } = get();

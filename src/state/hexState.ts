@@ -2,15 +2,16 @@ import create from "zustand";
 import * as Honeycomb from "honeycomb-grid";
 import { useCallback } from "react";
 
-export type Hex = {
-  hex: Honeycomb.Hex<{ size: number }>;
+export type Hex = Honeycomb.Hex<{}>;
+
+export type HexData = {
   letter: string | undefined;
   selected: boolean;
 };
 
 type HexState = {
   grid: Honeycomb.Grid;
-  hexes: Hex[];
+  hexes: HexData[];
   selectedHexIndex: number | undefined;
   setSelectedHexIndex: (index: number | undefined) => void;
   setSelectedLetter: (letter: string | undefined) => void;
@@ -21,8 +22,8 @@ const GridFactory = Honeycomb.defineGrid(HexFactory);
 const grid = GridFactory.hexagon({ radius: 5 });
 
 //Can't use Array.map here
-const hexes: Hex[] = [];
-grid.forEach((hex) => hexes.push({ hex, letter: undefined, selected: false }));
+const hexes: HexData[] = [];
+grid.forEach((hex) => hexes.push({ letter: undefined, selected: false }));
 
 export const useHexStore = create<HexState>((set, get) => ({
   grid,
@@ -61,7 +62,8 @@ export const useHexStore = create<HexState>((set, get) => ({
 }));
 
 export const useHex = (index: number) => {
-  const { hex, letter, selected } = useHexStore(
+  const hex = useHexStore((state) => state.grid[index]);
+  const { letter, selected } = useHexStore(
     useCallback((state) => state.hexes[index], [index])
   );
   const { setSelectedHexIndex, selectedHexIndex } = useHexStore.getState();
