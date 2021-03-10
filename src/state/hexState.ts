@@ -11,7 +11,7 @@ export type HexData = {
 
 type HexState = {
   grid: Honeycomb.Grid;
-  hexes: HexData[];
+  hexData: HexData[];
   selectedHexIndex: number | undefined;
   setSelectedHexIndex: (index: number | undefined) => void;
   setSelectedLetter: (letter: string | undefined) => void;
@@ -22,26 +22,26 @@ const GridFactory = Honeycomb.defineGrid(HexFactory);
 const grid = GridFactory.hexagon({ radius: 5 });
 
 //Can't use Array.map here
-const hexes: HexData[] = [];
-grid.forEach((hex) => hexes.push({ letter: undefined, selected: false }));
+const hexData: HexData[] = [];
+grid.forEach((hex) => hexData.push({ letter: undefined, selected: false }));
 
 export const useHexStore = create<HexState>((set, get) => ({
   grid,
-  hexes,
+  hexData,
   selectedHexIndex: undefined,
   setSelectedHexIndex: (index) => {
-    const { hexes, selectedHexIndex } = get();
+    const { hexData, selectedHexIndex } = get();
     if (index !== undefined) {
-      //Select current hex to selected
-      hexes[index] = {
-        ...hexes[index],
+      //Set current hex to selected
+      hexData[index] = {
+        ...hexData[index],
         selected: true,
       };
     }
     if (selectedHexIndex !== undefined && index !== selectedHexIndex) {
       //Deselect previously selected hex
-      hexes[selectedHexIndex] = {
-        ...hexes[selectedHexIndex],
+      hexData[selectedHexIndex] = {
+        ...hexData[selectedHexIndex],
         selected: false,
       };
     }
@@ -50,10 +50,10 @@ export const useHexStore = create<HexState>((set, get) => ({
     });
   },
   setSelectedLetter: (letter) => {
-    const { hexes, selectedHexIndex } = get();
+    const { hexData, selectedHexIndex } = get();
     if (selectedHexIndex !== undefined) {
-      hexes[selectedHexIndex] = {
-        ...hexes[selectedHexIndex],
+      hexData[selectedHexIndex] = {
+        ...hexData[selectedHexIndex],
         letter,
       };
       set({});
@@ -64,7 +64,7 @@ export const useHexStore = create<HexState>((set, get) => ({
 export const useHex = (index: number) => {
   const hex = useHexStore((state) => state.grid[index]);
   const { letter, selected } = useHexStore(
-    useCallback((state) => state.hexes[index], [index])
+    useCallback((state) => state.hexData[index], [index])
   );
   const { setSelectedHexIndex, selectedHexIndex } = useHexStore.getState();
   return {

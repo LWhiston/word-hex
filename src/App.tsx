@@ -11,7 +11,7 @@ import { useTurnStore } from "./state/turnState";
 import { tileLookup } from "./state/tilePileState";
 
 export const App = () => {
-  const length = useHexStore((state) => state.hexes.length);
+  const length = useHexStore((state) => state.grid.length);
   const { playMove, endTurn, undoMove } = useTurnStore();
   useWorldListInit();
 
