@@ -1,6 +1,6 @@
 import { remove } from "ramda";
 import create from "zustand";
-import { useTilePileState } from "./tilePileState";
+import { useTilePileStore } from "./tilePileState";
 
 export type Tile = {
   readonly letter: string;
@@ -9,13 +9,14 @@ export type Tile = {
 
 type RackState = {
   tiles: Tile[];
+  addTiles: (tiles: Tile[]) => void;
   removeLetter: (letter: string) => void;
 };
 
-const numOfTiles = 7;
+export const maxNumOfTiles = 7;
 
 export const useRackStore = create<RackState>((set, get) => ({
-  tiles: useTilePileState.getState().draw(numOfTiles),
+  tiles: useTilePileStore.getState().draw(maxNumOfTiles),
   removeLetter: (letter) => {
     const { tiles } = get();
     const letterIndex = tiles.findIndex((tile) => tile.letter === letter);
@@ -23,7 +24,7 @@ export const useRackStore = create<RackState>((set, get) => ({
       set({ tiles: remove(letterIndex, 1, tiles) });
     }
   },
-  addTiles: (tiles: Tile[]) => {
+  addTiles: (tiles) => {
     const { tiles: oldTiles } = get();
     set({ tiles: [...oldTiles, ...tiles] });
   },

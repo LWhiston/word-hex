@@ -42,7 +42,7 @@ initialTileInfo.forEach(({ letter, value }) => {
   tileLookup[letter] = { letter, value };
 });
 
-export const useTilePileState = create<TilePile>((set, get) => ({
+export const useTilePileStore = create<TilePile>((set, get) => ({
   tiles: shuffle(
     initialTileInfo.flatMap(({ letter, count, value }) =>
       Array.from({ length: count }).map((_) => ({ letter, value }))

@@ -12,7 +12,6 @@ import { tileLookup } from "./state/tilePileState";
 
 export const App = () => {
   const length = useHexStore((state) => state.hexes.length);
-  const setSelectedLetter = useHexStore((state) => state.setSelectedLetter);
   const { playMove, endTurn, undoMove } = useTurnStore();
   useWorldListInit();
 
@@ -43,7 +42,7 @@ export const App = () => {
   });
 
   return (
-    <div className="App" onKeyPress={(event) => console.log(event)}>
+    <div className="App">
       <Canvas
         camera={{
           fov: 75,

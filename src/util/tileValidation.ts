@@ -1,4 +1,4 @@
-import { countBy, identity, last, toPairs, uniq } from "ramda";
+import { identity, last, uniq } from "ramda";
 import { Hex } from "../state/hexState";
 import { Tile } from "../state/rackState";
 import { Move } from "../state/turnState";

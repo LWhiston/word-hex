@@ -21,6 +21,7 @@ export const Hex = (props: Props) => {
         ref={mesh}
         scale={[1, 1, 1]}
         onClick={(_event) => {
+          //console.log(hex.q, hex.r, hex.s);
           toggleHexSelected();
         }}
         onPointerOver={(_event) => setHover(true)}

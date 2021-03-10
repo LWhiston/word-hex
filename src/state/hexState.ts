@@ -9,6 +9,7 @@ export type Hex = {
 };
 
 type HexState = {
+  grid: Honeycomb.Grid;
   hexes: Hex[];
   selectedHexIndex: number | undefined;
   setSelectedHexIndex: (index: number | undefined) => void;
@@ -24,6 +25,7 @@ const hexes: Hex[] = [];
 grid.forEach((hex) => hexes.push({ hex, letter: undefined, selected: false }));
 
 export const useHexStore = create<HexState>((set, get) => ({
+  grid,
   hexes,
   selectedHexIndex: undefined,
   setSelectedHexIndex: (index) => {

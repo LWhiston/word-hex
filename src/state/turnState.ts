@@ -1,7 +1,9 @@
 import create from "zustand";
 import { validateMoves } from "../util/tileValidation";
+import { getWords } from "../util/words";
 import { Hex, useHexStore } from "./hexState";
-import { Tile, useRackStore } from "./rackState";
+import { maxNumOfTiles, Tile, useRackStore } from "./rackState";
+import { useTilePileStore } from "./tilePileState";
 
 export type Move = {
   tile: Tile;
@@ -34,6 +36,12 @@ export const useTurnStore = create<TurnState>((set, get) => ({
   },
   endTurn: () => {
     const { moves } = get();
-    const { hexes } = useHexStore.getState();
+    const { hexes, grid } = useHexStore.getState();
+    const words = getWords(moves, hexes, grid);
+    console.log(words);
+    const { draw } = useTilePileStore.getState();
+    const { tiles, addTiles } = useRackStore.getState();
+    addTiles(draw(maxNumOfTiles - tiles.length));
+    set({ moves: [] });
   },
 }));
