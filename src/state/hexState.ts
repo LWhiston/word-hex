@@ -19,7 +19,7 @@ type HexState = {
 
 const HexFactory = Honeycomb.extendHex<{ size: number }>({ size: 1.07 });
 const GridFactory = Honeycomb.defineGrid(HexFactory);
-const grid = GridFactory.hexagon({ radius: 5 });
+const grid = GridFactory.hexagon({ radius: 7 });
 
 //Can't use Array.map here
 const hexData: HexData[] = [];

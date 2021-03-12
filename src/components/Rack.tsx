@@ -14,7 +14,7 @@ export const Rack = () => {
       anchorX="center" // default
       anchorY="middle" // default
       fontSize={1.5}
-      position={[0, -8.25, 1]}
+      position={[0, -12, 1]}
     >
       {test}
     </Text>
