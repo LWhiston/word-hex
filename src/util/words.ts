@@ -16,22 +16,35 @@ const directionPairs: [number, number][] = [
   [2, 5],
 ];
 
+export type WordData = {
+  mainWord: string | undefined;
+  otherWords: string[];
+};
+
 export const getWords = (
   moves: Move[],
   hexData: HexData[],
   grid: Grid
-): string[] => {
+): WordData => {
+  if (moves.length === 0) {
+    return {
+      mainWord: undefined,
+      otherWords: [],
+    };
+  }
   if (moves.length === 1) {
     const words = moves.flatMap((move) =>
       directionPairs.map((directionPair) =>
         calculateWord(directionPair, move, grid, hexData)
       )
     );
-    return words;
+    return {
+      mainWord: undefined,
+      otherWords: words,
+    };
   } else {
     const line = getLine(moves[0].hex, moves[1].hex);
     const mainDirectionPair = directionToDirectionPair[line?.coordinate!];
-    console.log(mainDirectionPair);
     const mainWord = calculateWord(
       directionToDirectionPair[line?.coordinate!],
       moves[0],
@@ -45,7 +58,7 @@ export const getWords = (
           calculateWord(directionPair, move, grid, hexData)
         )
     );
-    return [mainWord, ...otherWords];
+    return { mainWord, otherWords };
   }
 };
 

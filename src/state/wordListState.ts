@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import create from "zustand";
 
+export type WordLookup = {
+  [word: string]: 1 | undefined;
+};
+
 type WorldListState = {
-  wordList: { [word: string]: 1 | undefined };
+  wordList: WordLookup;
   fetchWordList: () => void;
 };
 

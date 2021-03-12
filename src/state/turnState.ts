@@ -2,9 +2,11 @@ import { equals, remove } from "ramda";
 import create from "zustand";
 import { validateMoves } from "../util/tileValidation";
 import { getWords } from "../util/words";
+import { getValidWords } from "../util/wordValidation";
 import { Hex, useHexStore } from "./hexState";
 import { maxNumOfTiles, Tile, useRackStore } from "./rackState";
 import { useTilePileStore } from "./tilePileState";
+import { useWordListStore } from "./wordListState";
 
 export type Move = {
   tile: Tile;
@@ -49,11 +51,19 @@ export const useTurnStore = create<TurnState>((set, get) => ({
   endTurn: () => {
     const { moves } = get();
     const { hexData, grid } = useHexStore.getState();
-    const words = getWords(moves, hexData, grid);
-    console.log(words);
+    const { wordList } = useWordListStore.getState();
     const { draw } = useTilePileStore.getState();
     const { tiles, addTiles } = useRackStore.getState();
-    addTiles(draw(maxNumOfTiles - tiles.length));
-    set({ moves: [] });
+
+    const wordData = getWords(moves, hexData, grid);
+    const validWords = getValidWords(wordData, wordList);
+
+    if (validWords.length > 0) {
+      console.log(validWords);
+      addTiles(draw(maxNumOfTiles - tiles.length));
+      set({ moves: [] });
+    } else {
+      //TODO
+    }
   },
 }));
