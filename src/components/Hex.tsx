@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { Mesh } from "three";
 import { useHex } from "../state/hexState";
 import { Letter } from "./Letter";
@@ -39,11 +39,7 @@ export const Hex = (props: Props) => {
         />
         <meshStandardMaterial color={selected ? "#cd8500" : "#8b5a2b"} />
       </mesh>
-      {letter !== undefined && (
-        <Suspense fallback={null}>
-          <Letter letter={letter} />
-        </Suspense>
-      )}
+      {letter !== undefined && <Letter letter={letter} />}
     </group>
   );
 };
