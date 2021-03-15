@@ -5,6 +5,7 @@ import { getWords } from "../util/words";
 import { getValidWords } from "../util/wordValidation";
 import { Hex, useHexStore } from "./hexState";
 import { maxNumOfTiles, Tile, useRackStore } from "./rackState";
+import { useScoreStore } from "./scoreState";
 import { useTilePileStore } from "./tilePileState";
 import { useWordListStore } from "./wordListState";
 
@@ -54,6 +55,7 @@ export const useTurnStore = create<TurnState>((set, get) => ({
     const { wordList } = useWordListStore.getState();
     const { draw } = useTilePileStore.getState();
     const { tiles, addTiles } = useRackStore.getState();
+    const { scoreWords } = useScoreStore.getState();
 
     const wordData = getWords(moves, hexData, grid);
     const validWords = getValidWords(wordData, wordList);
@@ -61,6 +63,7 @@ export const useTurnStore = create<TurnState>((set, get) => ({
     if (validWords.length > 0) {
       console.log(validWords);
       addTiles(draw(maxNumOfTiles - tiles.length));
+      scoreWords(validWords);
       set({ moves: [] });
     } else {
       //TODO

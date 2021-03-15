@@ -9,6 +9,7 @@ import { Rack } from "./components/Rack";
 import { useWorldListInit } from "./state/wordListState";
 import { useTurnStore } from "./state/turnState";
 import { tileLookup } from "./state/tilePileState";
+import { Score } from "./components/Score";
 
 export const App = () => {
   const length = useHexStore((state) => state.grid.length);
@@ -59,6 +60,7 @@ export const App = () => {
           ))}
         </group>
         <Rack />
+        <Score />
       </Canvas>
     </div>
   );
