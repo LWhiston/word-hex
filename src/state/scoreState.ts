@@ -10,13 +10,13 @@ type ScoreState = {
 
 const stringToList = split("");
 
-const scoreWord = pipe(
+export const scoreWord = pipe(
   stringToList,
   map((char) => tileLookup[char].value),
   reduce(add, 0)
 );
 
-const scoreWords = pipe(map(scoreWord), reduce(add, 0));
+export const scoreWords = pipe(map(scoreWord), reduce(add, 0));
 
 export const useScoreStore = create<ScoreState>((set, get) => ({
   score: 0,

@@ -10,6 +10,8 @@ import { useWorldListInit } from "./state/wordListState";
 import { useTurnStore } from "./state/turnState";
 import { tileLookup } from "./state/tilePileState";
 import { Score } from "./components/Score";
+import { ScoredWords } from "./components/ScoredWords";
+import { range } from "ramda";
 
 export const App = () => {
   const length = useHexStore((state) => state.grid.length);
@@ -55,12 +57,13 @@ export const App = () => {
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
         <group position={[0, 1, 0]}>
-          {Array.from({ length }).map((_, index) => (
+          {range(0, length).map((index) => (
             <Hex key={index} hexIndex={index} />
           ))}
         </group>
         <Rack />
         <Score />
+        <ScoredWords />
       </Canvas>
     </div>
   );
